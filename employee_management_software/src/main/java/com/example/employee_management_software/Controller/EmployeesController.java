@@ -53,12 +53,12 @@ public class EmployeesController {
         return ResponseEntity.status(HttpStatus.OK).body(new ApiResponse("Employee deleted !"));
     }
 
-      @PutMapping("/checkannual/{id}/{day}")
+     @PutMapping("/checkannual/{id}/{day}")
     public ResponseEntity checkAnnual(@PathVariable String id,@PathVariable int day){
         for (EmployeesModel model:employees){
-            if (id.equals(model.getId())){
+            if (id.equals(model.getId()) && day <= model.getAnnualLeave()){
                 if (model.isOnLeave()){
-                    return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ApiResponse("The Employee is Already on leave !"));
+                    return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ApiResponse(" The Employee is Already is on leave !"));
                 }
                 int days  = model.getAnnualLeave() - day;
                 model.setOnLeave(true);
