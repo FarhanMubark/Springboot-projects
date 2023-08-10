@@ -53,19 +53,20 @@ public class EmployeesController {
         return ResponseEntity.status(HttpStatus.OK).body(new ApiResponse("Employee deleted !"));
     }
 
-    @PutMapping("/checkAnnual/{id}/{day}")
-    public ResponseEntity checkAnnualLeave(@PathVariable String id,@PathVariable int day){
-
+      @PutMapping("/checkannual/{id}/{day}")
+    public ResponseEntity checkAnnual(@PathVariable String id,@PathVariable int day){
         for (EmployeesModel model:employees){
             if (id.equals(model.getId())){
-                int days = model.getAnnualLeave()-day;
+                if (model.isOnLeave()){
+                    return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ApiResponse("The Employee is Already on leave !"));
+                }
+                int days  = model.getAnnualLeave() - day;
                 model.setOnLeave(true);
                 model.setAnnualLeave(days);
-                return ResponseEntity.status(HttpStatus.OK).body(new ApiResponse("Operation Done!"));
+                return ResponseEntity.status(200).body(new ApiResponse("Operation Done!"));
             }
         }
-        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ApiResponse("Operation Fail !"));
-  
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ApiResponse("Operation Fail"));
     }
 
 
